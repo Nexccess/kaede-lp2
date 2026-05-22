@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIメンズ脱毛診断 | kaede 楓 salon</title>
+<meta name="description" content="5つの質問に答えるだけで、あなたの現状と最適なケアプランをAIが整理します。東京浅草・都度払いのメンズ脱毛サロン。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Noto+Sans+JP:wght@300;400;500&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --black:#080c08;
+  --dark:#0f1a0f;
+  --green:#1db954;
+  --green-mid:#17a847;
+  --green-pale:#e8f8ee;
+  --white:#f8faf8;
+  --muted:#8a9e8a;
+  --border:#1e2e1e;
+  --font-heading:'Barlow Condensed','Oswald',sans-serif;
+  --font-body:'Noto Sans JP',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--black);color:var(--white);font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(8,12,8,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 40px;height:58px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-mark{width:32px;height:32px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:2px;}
+.nav-logo-text{font-family:var(--font-heading);font-size:16px;font-weight:700;letter-spacing:.08em;color:var(--white);}
+.nav-logo-sub{font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,var(--dark) 0%,#0a150a 50%,#051005 100%);}
+.hero-grid{position:absolute;inset:0;opacity:.06;background-image:linear-gradient(var(--green) 1px,transparent 1px),linear-gradient(90deg,var(--green) 1px,transparent 1px);background-size:80px 80px;}
+.hero-accent{position:absolute;right:-100px;top:50%;transform:translateY(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(29,185,84,.12) 0%,transparent 70%);}
+.hero-inner{position:relative;z-index:1;padding:100px 40px 80px;max-width:1100px;width:100%;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:60px;align-items:center;}
+.hero-eyebrow{font-family:var(--font-heading);font-size:11px;font-weight:600;letter-spacing:.3em;color:var(--green);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::before{content:'';width:32px;height:2px;background:var(--green);}
+.hero-title{font-family:var(--font-heading);font-size:clamp(56px,7vw,88px);font-weight:800;line-height:1;letter-spacing:.01em;text-transform:uppercase;margin-bottom:24px;}
+.hero-title .accent{color:var(--green);display:block;}
+.hero-title .sub{font-size:clamp(28px,4vw,44px);font-weight:600;color:rgba(255,255,255,.5);display:block;margin-top:4px;}
+.hero-desc{font-size:14px;color:var(--muted);line-height:2;margin-bottom:36px;max-width:440px;}
+.hero-cta{display:inline-flex;align-items:center;gap:12px;background:var(--green);color:var(--black);padding:16px 36px;font-family:var(--font-heading);font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border:none;transition:background .2s,transform .1s;}
+.hero-cta:hover{background:var(--green-mid);transform:translateY(-2px);}
+.hero-note{font-size:10px;color:var(--muted);margin-top:12px;letter-spacing:.06em;}
+.hero-stats{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.stat-box{background:var(--dark);padding:20px 16px;}
+.stat-num{font-family:var(--font-heading);font-size:32px;font-weight:800;color:var(--green);line-height:1;}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:4px;}
+.hero-panel{background:var(--dark);border:1px solid var(--border);padding:32px;}
+.hero-panel-label{font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--green);text-transform:uppercase;margin-bottom:16px;}
+.price-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.price-row{background:var(--dark);padding:14px 16px;display:flex;justify-content:space-between;align-items:baseline;}
+.price-row:hover{background:#131d13;}
+.price-part{font-size:13px;color:rgba(255,255,255,.8);}
+.price-val{font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--white);}
+.price-val span{font-size:11px;font-weight:400;color:var(--muted);}
+.price-featured{background:#0d1f0d !important;border-left:2px solid var(--green);}
+.price-featured .price-val{color:var(--green);}
+
+/* SECTIONS */
+section{padding:96px 40px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-label{font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:.3em;color:var(--green);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.section-label::after{content:'';flex:0 0 24px;height:2px;background:var(--green);}
+.section-title{font-family:var(--font-heading);font-size:clamp(36px,4.5vw,56px);font-weight:800;text-transform:uppercase;line-height:1.1;margin-bottom:16px;}
+.section-title .dim{color:rgba(255,255,255,.2);}
+
+/* REASON */
+.reasons{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.reasons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:48px;}
+.reason-card{background:var(--dark);padding:40px 32px;transition:background .2s;}
+.reason-card:hover{background:#0a160a;}
+.reason-num{font-family:var(--font-heading);font-size:64px;font-weight:800;color:rgba(29,185,84,.12);line-height:1;margin-bottom:8px;}
+.reason-icon{font-size:28px;margin-bottom:16px;}
+.reason-title{font-family:var(--font-heading);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px;}
+.reason-desc{font-size:13px;color:var(--muted);line-height:1.9;}
+.reason-tag{margin-top:20px;display:inline-block;font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:.14em;padding:4px 10px;border:1px solid var(--green);color:var(--green);text-transform:uppercase;}
+
+/* PRICE */
+.price-section{background:var(--black);}
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:48px;}
+.price-table{background:var(--dark);border:1px solid var(--border);}
+.price-table-head{background:#0d200d;padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.price-table-title{font-family:var(--font-heading);font-size:16px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.price-table-badge{font-family:var(--font-heading);font-size:10px;font-weight:600;background:var(--green);color:var(--black);padding:3px 10px;letter-spacing:.1em;}
+.price-items{display:flex;flex-direction:column;}
+.price-item{padding:14px 24px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto;align-items:baseline;transition:background .15s;}
+.price-item:hover{background:#0a160a;}
+.price-item:last-child{border-bottom:none;}
+.price-item-name{font-size:13px;color:rgba(255,255,255,.75);}
+.price-item-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.price-item-price{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--white);}
+.price-item-price span{font-size:11px;font-weight:400;color:var(--muted);}
+.price-item.hot{background:#0a1a0a;}
+.price-item.hot .price-item-price{color:var(--green);}
+.free-banner{margin-top:24px;background:linear-gradient(135deg,#0d200d,#051305);border:1px solid var(--green);padding:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.free-banner-text .tag{font-family:var(--font-heading);font-size:9px;font-weight:600;background:var(--green);color:var(--black);padding:2px 8px;letter-spacing:.12em;display:inline-block;margin-bottom:8px;}
+.free-banner-text h3{font-family:var(--font-heading);font-size:22px;font-weight:800;text-transform:uppercase;}
+.free-banner-text p{font-size:12px;color:var(--muted);margin-top:6px;}
+.free-banner-prices{display:flex;gap:20px;flex-shrink:0;}
+.free-price-box{text-align:center;background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.2);padding:16px 24px;}
+.free-price-time{font-family:var(--font-heading);font-size:28px;font-weight:800;color:var(--green);line-height:1;}
+.free-price-label{font-size:10px;color:var(--muted);letter-spacing:.1em;margin-top:4px;}
+
+/* BOOKING SECTION */
+.booking-section{background:var(--dark);border-top:1px solid var(--border);}
+.booking-form-wrap{margin-top:40px;max-width:600px;}
+.form-group{margin-bottom:20px;}
+.form-label{display:block;font-family:var(--font-heading);font-size:11px;font-weight:600;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.form-input{width:100%;background:#0a160a;border:1px solid var(--border);color:var(--white);padding:12px 16px;font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:var(--green);}
+.form-input::placeholder{color:var(--muted);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.btn-submit{width:100%;background:var(--green);color:var(--black);border:none;padding:16px;font-family:var(--font-heading);font-size:16px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:8px;transition:background .2s;}
+.btn-submit:hover{background:var(--green-mid);}
+.btn-submit:disabled{background:#2a4a2a;cursor:not-allowed;}
+.booking-complete{display:none;text-align:center;padding:48px 32px;background:#0d200d;border:1px solid var(--green);}
+.booking-complete h3{font-family:var(--font-heading);font-size:28px;font-weight:800;color:var(--green);margin-bottom:12px;}
+.booking-complete p{color:var(--muted);line-height:2;}
+
+/* CTA BAND */
+.cta-band{background:var(--green);padding:80px 40px;text-align:center;}
+.cta-band .section-label{color:var(--black);justify-content:center;}
+.cta-band .section-label::after{background:var(--black);}
+.cta-band .section-title{color:var(--black);}
+.cta-band-desc{font-size:14px;color:rgba(0,0,0,.65);margin:16px auto 40px;max-width:480px;line-height:2;}
+.cta-band-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-dark{display:inline-flex;align-items:center;gap:8px;background:var(--black);color:var(--white);padding:16px 36px;font-family:var(--font-heading);font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s;}
+.btn-dark:hover{opacity:.85;}
+.btn-outline-dark{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--black);color:var(--black);padding:14px 32px;font-family:var(--font-heading);font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:background .2s,color .2s;}
+.btn-outline-dark:hover{background:var(--black);color:var(--green);}
+
+/* SALON INFO */
+.salon-section{background:var(--dark);border-top:1px solid var(--border);}
+.salon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:40px;}
+.salon-card{background:var(--dark);padding:28px 24px;}
+.salon-card-label{font-family:var(--font-heading);font-size:9px;font-weight:600;letter-spacing:.2em;color:var(--green);text-transform:uppercase;margin-bottom:10px;}
+.salon-card-val{font-size:14px;color:rgba(255,255,255,.8);line-height:1.9;}
+.salon-card-val a{color:var(--green);text-decoration:none;}
+
+/* FOOTER */
+footer{background:var(--black);border-top:1px solid var(--border);padding:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+.footer-logo{font-family:var(--font-heading);font-size:18px;font-weight:800;letter-spacing:.08em;color:rgba(255,255,255,.6);text-transform:uppercase;}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-links a{font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.3);text-decoration:none;text-transform:uppercase;}
+.footer-links a:hover{color:rgba(255,255,255,.7);}
+.footer-copy{font-size:10px;color:rgba(255,255,255,.2);width:100%;}
+
+/* MODAL OVERLAY */
+#diagOverlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);justify-content:center;align-items:center;padding:20px;}
+#diagOverlay.active{display:flex;}
+.diag-box{background:var(--dark);border:1px solid var(--border);max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:40px 36px;}
+.diag-close{float:right;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;margin:-8px -8px 0 0;line-height:1;}
+.diag-close:hover{color:var(--white);}
+.diag-screen{display:none;}
+.diag-screen.active{display:block;}
+
+/* INTRO */
+.diag-intro-label{font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:.3em;color:var(--green);text-transform:uppercase;margin-bottom:16px;}
+.diag-intro-title{font-family:var(--font-heading);font-size:34px;font-weight:800;line-height:1.1;margin-bottom:16px;}
+.diag-intro-badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+.diag-badge{font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:.1em;border:1px solid var(--green);color:var(--green);padding:4px 10px;text-transform:uppercase;}
+.diag-start-btn{width:100%;background:var(--green);color:var(--black);border:none;padding:16px;font-family:var(--font-heading);font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.diag-start-btn:hover{background:var(--green-mid);}
+
+/* PROGRESS */
+.diag-progress-wrap{margin-bottom:28px;}
+.diag-progress-label{font-family:var(--font-heading);font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.diag-progress-bar{height:3px;background:var(--border);width:100%;}
+.diag-progress-fill{height:3px;background:var(--green);transition:width .4s;}
+
+/* QUESTION */
+.diag-q-text{font-family:var(--font-heading);font-size:22px;font-weight:700;line-height:1.3;margin-bottom:24px;}
+.diag-options{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.diag-opt{background:none;border:1px solid var(--border);color:var(--white);padding:14px 18px;text-align:left;font-family:var(--font-body);font-size:14px;cursor:pointer;transition:border-color .2s,background .2s;}
+.diag-opt:hover{border-color:var(--green);background:#0a160a;}
+.diag-opt.selected{border-color:var(--green);background:#0d200d;color:var(--green);}
+.diag-next-btn{width:100%;background:var(--green);color:var(--black);border:none;padding:14px;font-family:var(--font-heading);font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;opacity:.4;transition:opacity .2s,background .2s;}
+.diag-next-btn.enabled{opacity:1;}
+.diag-next-btn.enabled:hover{background:var(--green-mid);}
+
+/* LOADING */
+.diag-loading{text-align:center;padding:32px 0;}
+.diag-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.diag-loading p{color:var(--muted);font-size:13px;}
+
+/* RESULT */
+.diag-result-level{font-family:var(--font-heading);font-size:11px;font-weight:600;letter-spacing:.3em;color:var(--green);text-transform:uppercase;margin-bottom:8px;}
+.diag-result-menu{font-family:var(--font-heading);font-size:28px;font-weight:800;line-height:1.2;margin-bottom:8px;}
+.diag-result-price{font-family:var(--font-heading);font-size:22px;font-weight:700;color:var(--green);margin-bottom:16px;}
+.diag-result-reason{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:24px;padding:16px;background:#0a160a;border-left:2px solid var(--green);}
+.diag-result-score{font-family:var(--font-heading);font-size:11px;color:var(--muted);margin-bottom:28px;}
+.diag-to-book{width:100%;background:var(--green);color:var(--black);border:none;padding:16px;font-family:var(--font-heading);font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+.diag-to-book:hover{background:var(--green-mid);}
+
+/* FORM IN MODAL */
+.diag-form-title{font-family:var(--font-heading);font-size:22px;font-weight:800;margin-bottom:24px;}
+.diag-form-group{margin-bottom:18px;}
+.diag-form-label{display:block;font-family:var(--font-heading);font-size:10px;font-weight:600;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:7px;}
+.diag-form-input{width:100%;background:#0a160a;border:1px solid var(--border);color:var(--white);padding:11px 14px;font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .2s;}
+.diag-form-input:focus{border-color:var(--green);}
+.diag-form-input::placeholder{color:var(--muted);}
+.diag-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.diag-submit-btn{width:100%;background:var(--green);color:var(--black);border:none;padding:15px;font-family:var(--font-heading);font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:8px;transition:background .2s;}
+.diag-submit-btn:hover{background:var(--green-mid);}
+.diag-submit-btn:disabled{background:#2a4a2a;cursor:not-allowed;}
+
+/* COMPLETE IN MODAL */
+.diag-complete{text-align:center;padding:24px 0;}
+.diag-complete-icon{font-size:48px;margin-bottom:16px;}
+.diag-complete-title{font-family:var(--font-heading);font-size:28px;font-weight:800;color:var(--green);margin-bottom:12px;}
+.diag-complete-text{color:var(--muted);line-height:2;font-size:13px;}
+.diag-line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:var(--white);padding:14px 28px;font-family:var(--font-heading);font-size:14px;font-weight:700;letter-spacing:.1em;text-decoration:none;margin-top:24px;border-radius:2px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-panel{display:none;}
+  .reasons-grid{grid-template-columns:1fr;}
+  .price-grid{grid-template-columns:1fr;}
+  .salon-grid{grid-template-columns:1fr 1fr;}
+  .free-banner{flex-direction:column;}
+  .form-row{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .nav{padding:0 20px;}
+  section{padding:64px 20px;}
+  .hero-inner{padding:90px 20px 60px;}
+  .salon-grid{grid-template-columns:1fr;}
+  footer{padding:32px 20px;}
+  .cta-band{padding:60px 20px;}
+  .diag-box{padding:28px 20px;}
+  .diag-form-row{grid-template-columns:1fr;}
+  /* hero-face: スマホでは上部中央に縮小表示 */
+  .hero-face-layer{width:100% !important;height:240px !important;top:0 !important;opacity:.15 !important;-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.6) 0%,transparent 100%) !important;mask-image:linear-gradient(to bottom,rgba(0,0,0,.6) 0%,transparent 100%) !important;}
+  /* reason card images */
+  .reason-img-wrap{height:80px !important;}
+  /* CTA tablet image */
+  .cta-tablet-img{width:100% !important;height:120px !important;}
+}
+
+/* RESPONSIVE IMAGES - global */
+img{max-width:100%;height:auto;display:block;}
+
+/* FADE */
+.fade{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fade.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark" style="background:none;padding:2px;"><img src="img/maple.png" alt="楓" style="width:28px;height:28px;object-fit:contain;"></div>
+    <div>
+      <div class="nav-logo-text">kaede salon</div>
+      <div class="nav-logo-sub">Men's Depilation</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#price">料金</a></li>
+    <li><a href="#booking">予約</a></li>
+    <li><a href="https://line.me/R/ti/p/@436hrsli" target="_blank" rel="noopener">LINE</a></li>
+    <li><a href="https://kaedesalon.shop/" target="_blank" rel="noopener">公式サイト</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-accent"></div>
+  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;">
+    <div class="hero-face-layer" style="position:absolute;right:0;top:0;width:55%;height:100%;background-image:url('img/hero-face.png');background-size:cover;background-position:center top;opacity:.22;-webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.8) 40%,rgba(0,0,0,.8) 100%);mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.8) 40%,rgba(0,0,0,.8) 100%);"></div>
+  </div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow fade">AI Diagnosis Tool</div>
+      <h1 class="hero-title fade">
+        <span class="accent">脱毛は、</span>
+        今日から<br>動き出す。
+        <span class="sub">Men's Depilation AI</span>
+      </h1>
+      <p class="hero-desc fade">5つの質問に答えるだけで、あなたの現状と最適なケアプランをAIが整理します。</p>
+      <button class="hero-cta fade" onclick="openDiag(null)">無料AI診断をする <span>→</span></button>
+      <p class="hero-note fade">※ 法律・医療上の判断・助言を行うものではありません</p>
+      <div class="hero-stats fade">
+        <div class="stat-box"><div class="stat-num">5問</div><div class="stat-label">Questions</div></div>
+        <div class="stat-box"><div class="stat-num">約1分</div><div class="stat-label">All Free</div></div>
+        <div class="stat-box"><div class="stat-num">700円〜</div><div class="stat-label">都度払い</div></div>
+      </div>
+    </div>
+    <div class="hero-panel fade">
+      <div class="hero-panel-label">Price Menu</div>
+      <div class="price-list">
+        <div class="price-row"><span class="price-part">Sパーツ 単品</span><span class="price-val">¥700<span> 税込〜</span></span></div>
+        <div class="price-row"><span class="price-part">Mパーツ 単品</span><span class="price-val">¥1,400<span> 税込</span></span></div>
+        <div class="price-row"><span class="price-part">Lパーツ（VIO）</span><span class="price-val">¥4,200<span> 税込</span></span></div>
+        <div class="price-row price-featured"><span class="price-part">全身脱毛</span><span class="price-val">¥11,000<span> 税込</span></span></div>
+        <div class="price-row"><span class="price-part">Freeコース 30分</span><span class="price-val price-val" style="font-size:14px;">要問合せ</span></div>
+        <div class="price-row"><span class="price-part">Freeコース 60分</span><span class="price-val" style="font-size:14px;">要問合せ</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REASONS ===== -->
+<section class="reasons">
+  <div class="section-inner">
+    <div class="section-label fade">Why kaede</div>
+    <h2 class="section-title fade">選ばれる<br><span class="dim">3つの</span>理由</h2>
+    <div class="reasons-grid">
+      <div class="reason-card fade">
+        <div class="reason-num">01</div>
+        <div class="reason-img-wrap" style="width:100%;height:120px;overflow:hidden;margin-bottom:16px;border-radius:2px;background-image:url('img/icons-reasons1.png');background-size:cover;background-position:center;"></div>
+        <div class="reason-title">都内最安値水準</div>
+        <p class="reason-desc">入会金・管理費・キャンセル料なし。見えない費用がないから本当に安い。1パーツ700円からお試し可能。</p>
+        <span class="reason-tag">S パーツ ¥700〜</span>
+      </div>
+      <div class="reason-card fade">
+        <div class="reason-num">02</div>
+        <div class="reason-img-wrap" style="width:100%;height:120px;overflow:hidden;margin-bottom:16px;border-radius:2px;background-image:url('img/icons-reasons2.png');background-size:cover;background-position:center;"></div>
+        <div class="reason-title">都度払い・縛りなし</div>
+        <p class="reason-desc">コース加入・回数券は一切不要。その日の気分で来れる。出張族・転勤族にも選ばれる理由。</p>
+        <span class="reason-tag">コース不要</span>
+      </div>
+      <div class="reason-card fade">
+        <div class="reason-num">03</div>
+        <div class="reason-img-wrap" style="width:100%;height:120px;overflow:hidden;margin-bottom:16px;border-radius:2px;background-image:url('img/icons-reasons3.png');background-size:cover;background-position:center;"></div>
+        <div class="reason-title">開業4周年・実績多数</div>
+        <p class="reason-desc">2020年開業から4周年突破。リピーターに支えられた確かな技術。LGBTフレンドリー対応。</p>
+        <span class="reason-tag">LGBT Welcome</span>
+      </div>
+        <div class="reason-title">開業4周年・実績多数</div>
+        <p class="reason-desc">2020年開業から4周年突破。リピーターに支えられた確かな技術。LGBTフレンドリー対応。</p>
+        <span class="reason-tag">LGBT Welcome</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICE ===== -->
+<section class="price-section" id="price">
+  <div class="section-inner">
+    <div class="section-label fade">Price Menu</div>
+    <h2 class="section-title fade">明快な<br><span class="dim">料金表</span></h2>
+    <div class="price-grid">
+      <div>
+        <div class="price-table fade">
+          <div class="price-table-head"><span class="price-table-title">パーツ別 単品</span></div>
+          <div class="price-items">
+            <div class="price-item"><div><div class="price-item-name">Sパーツ</div><div class="price-item-sub">鼻下・あご・顎下 etc.</div></div><div class="price-item-price">¥700<span> 税込</span></div></div>
+            <div class="price-item"><div><div class="price-item-name">Mパーツ</div><div class="price-item-sub">わき・うなじ・Vライン上 etc.</div></div><div class="price-item-price">¥1,400<span> 税込</span></div></div>
+            <div class="price-item"><div><div class="price-item-name">MLパーツ</div><div class="price-item-sub">胸・腹・ヒジ上下 etc.</div></div><div class="price-item-price">¥2,800<span> 税込</span></div></div>
+            <div class="price-item"><div><div class="price-item-name">Lパーツ</div><div class="price-item-sub">背中・おしり・VIO etc.</div></div><div class="price-item-price">¥4,200<span> 税込</span></div></div>
+            <div class="price-item"><div><div class="price-item-name">LLパーツ</div><div class="price-item-sub">太もも・ヒザ下</div></div><div class="price-item-price">¥4,900<span> 税込</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="price-table fade">
+          <div class="price-table-head"><span class="price-table-title">スペシャル</span><span class="price-table-badge">人気</span></div>
+          <div class="price-items">
+            <div class="price-item hot"><div><div class="price-item-name">全身脱毛</div><div class="price-item-sub">VIOなし・120分</div></div><div class="price-item-price">¥11,000<span> 税込</span></div></div>
+            <div class="price-item"><div><div class="price-item-name">顔のみ</div><div class="price-item-sub">25分</div></div><div class="price-item-price">¥3,000<span> 税込</span></div></div>
+            <div class="price-item"><div><div class="price-item-name">VIO</div><div class="price-item-sub">25分</div></div><div class="price-item-price">¥4,000<span> 税込</span></div></div>
+          </div>
+        </div>
+        <div class="free-banner fade">
+          <div class="free-banner-text">
+            <span class="tag">🔥 Hot Menu</span>
+            <h3>脱毛 Free コース</h3>
+            <p>時間内なら好きな部位を何パーツでも脱毛できる革新システム</p>
+          </div>
+          <div class="free-banner-prices">
+            <div class="free-price-box"><div class="free-price-time">30分</div><div class="free-price-label">Free Course</div></div>
+            <div class="free-price-box"><div class="free-price-time">60分</div><div class="free-price-label">Free Course</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<div class="cta-band fade" style="position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:url('img/ai-tablet.png');background-size:cover;background-position:center;opacity:.12;z-index:0;"></div>
+  <div style="position:relative;z-index:1;">
+  <div class="section-label">AI Tool</div>
+  <h2 class="section-title">自分の状況を、<br>まず整理する。</h2>
+  <p class="cta-band-desc">5問・約1分。診断結果は提案・勧誘ではありません。あなた自身が現状を把握するための一次整理です。</p>
+  <div class="cta-band-btns">
+    <button class="btn-dark" onclick="openDiag(null)">AI診断を試す →</button>
+    <a href="https://line.me/R/ti/p/@436hrsli" target="_blank" rel="noopener" class="btn-outline-dark">💬 LINEで相談</a>
+  </div>
+  </div>
+</div>
+
+<!-- ===== BOOKING SECTION ===== -->
+<section class="booking-section" id="booking">
+  <div class="section-inner">
+    <div class="section-label fade">Reservation</div>
+    <h2 class="section-title fade">ご予約<span class="dim">フォーム</span></h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:32px;" class="fade">仮予約受付後、LINEにてご希望日時を確定いたします。</p>
+    <div class="booking-form-wrap fade" id="bookingFormWrap">
+      <div class="form-group">
+        <label class="form-label">お名前 <span style="color:var(--green)">*</span></label>
+        <input type="text" class="form-input" id="bName" placeholder="山田 太郎" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">携帯電話番号 <span style="color:var(--green)">*</span></label>
+          <input type="tel" class="form-input" id="bPhone" placeholder="090-0000-0000" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">メールアドレス <span style="color:var(--green)">*</span></label>
+          <input type="email" class="form-input" id="bEmail" placeholder="example@email.com" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">希望日（第1希望） <span style="color:var(--green)">*</span></label>
+          <input type="date" class="form-input" id="bDate" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">希望時間帯</label>
+          <select class="form-input" id="bTime">
+            <option value="11:00〜13:00">11:00〜13:00</option>
+            <option value="13:00〜15:00">13:00〜15:00</option>
+            <option value="15:00〜17:00">15:00〜17:00</option>
+            <option value="17:00〜20:00">17:00〜20:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">希望日（第2希望）</label>
+        <input type="date" class="form-input" id="bDate2">
+      </div>
+      <button class="btn-submit" id="bookSubmitBtn" onclick="submitBooking()">予約を送信する →</button>
+    </div>
+    <div class="booking-complete" id="bookingComplete">
+      <h3>✅ 受付完了</h3>
+      <p>ご予約を受け付けました。<br>LINEまたはメールにてご連絡いたします。</p>
+      <div style="margin-top:24px;">
+        <a href="https://line.me/R/ti/p/@436hrsli" target="_blank" rel="noopener" class="diag-line-btn">💬 LINEで確認する</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SALON INFO ===== -->
+<section class="salon-section">
+  <div class="section-inner">
+    <div class="section-label fade">Salon Info</div>
+    <h2 class="section-title fade">kaede <span class="dim">楓 salon</span></h2>
+    <div class="salon-grid">
+      <div class="salon-card fade">
+        <div style="width:100%;height:80px;background-image:url('img/room.png');background-size:cover;background-position:center;border-radius:2px;margin-bottom:12px;opacity:.8;"></div>
+        <div class="salon-card-label">Location</div><div class="salon-card-val">東京都台東区東浅草1-9-2<br>浅草駅から徒歩約10分</div>
+      </div>
+      <div class="salon-card fade">
+        <div style="width:100%;height:80px;background-image:url('img/towels.png');background-size:cover;background-position:center;border-radius:2px;margin-bottom:12px;opacity:.8;"></div>
+        <div class="salon-card-label">Hours</div><div class="salon-card-val">11:00〜20:00<br>定休日：毎週月曜</div>
+      </div>
+      <div class="salon-card fade"><div class="salon-card-label">Price</div><div class="salon-card-val">Sパーツ ¥700〜<br>都度払い・縛りなし</div></div>
+      <div class="salon-card fade"><div class="salon-card-label">Contact</div><div class="salon-card-val"><a href="https://line.me/R/ti/p/@436hrsli" target="_blank" rel="noopener">LINE予約・相談</a><br><a href="https://kaedesalon.shop/" target="_blank" rel="noopener">公式サイト →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo"><img src="img/logo.png" alt="kaede 楓 salon" style="height:48px;object-fit:contain;opacity:.7;vertical-align:middle;"></div>
+    <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;letter-spacing:.06em;">東京最安値水準・都度払いのメンズ脱毛サロン / 台東区東浅草</div>
+  </div>
+  <div class="footer-links">
+    <a href="#price">料金</a>
+    <a href="#booking">予約</a>
+    <a href="https://kaedesalon.shop/" target="_blank" rel="noopener">公式サイト</a>
+  </div>
+  <div class="footer-copy">© 2026 kaede 楓 salon. All rights reserved.</div>
+</footer>
+
+<!-- ===== AI診断 MODAL ===== -->
+<div id="diagOverlay">
+  <div class="diag-box">
+    <button class="diag-close" onclick="closeDiag()">✕</button>
+
+    <!-- INTRO -->
+    <div class="diag-screen active" id="diagIntro">
+      <div class="diag-intro-label">AI Diagnosis</div>
+      <div class="diag-intro-title">AIメンズ<br>脱毛診断</div>
+      <div class="diag-intro-badges">
+        <span class="diag-badge">完全無料</span>
+        <span class="diag-badge">約1分</span>
+        <span class="diag-badge">勧誘なし</span>
+      </div>
+      <p style="color:var(--muted);font-size:13px;line-height:2;margin-bottom:28px;">5つの質問に答えるだけで、あなたに最適な脱毛メニューをAIが提案します。</p>
+      <button class="diag-start-btn" onclick="startDiag()">診断をはじめる →</button>
+    </div>
+
+    <!-- QUESTION -->
+    <div class="diag-screen" id="diagQuestion">
+      <div class="diag-progress-wrap">
+        <div class="diag-progress-label">Question <span id="qNum">1</span> / 5</div>
+        <div class="diag-progress-bar"><div class="diag-progress-fill" id="progressFill" style="width:20%"></div></div>
+      </div>
+      <div class="diag-q-text" id="qText"></div>
+      <div class="diag-options" id="qOptions"></div>
+      <button class="diag-next-btn" id="nextBtn" onclick="nextQ()">次の質問 →</button>
+    </div>
+
+    <!-- LOADING -->
+    <div class="diag-screen" id="diagLoading">
+      <div class="diag-loading">
+        <div class="diag-spinner"></div>
+        <p>AIが診断中です…<br>少々お待ちください</p>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="diag-screen" id="diagResult">
+      <div class="diag-result-level" id="resLevel"></div>
+      <div class="diag-result-menu" id="resMenu"></div>
+      <div class="diag-result-price" id="resPrice"></div>
+      <div class="diag-result-reason" id="resReason"></div>
+      <div class="diag-result-score" id="resScore"></div>
+      <button class="diag-to-book" onclick="showDiagForm()">このメニューで予約する →</button>
+      <button onclick="closeDiag()" style="width:100%;margin-top:10px;background:none;border:1px solid var(--border);color:var(--muted);padding:12px;cursor:pointer;font-family:var(--font-heading);font-size:12px;letter-spacing:.1em;">閉じる</button>
+    </div>
+
+    <!-- BOOKING FORM IN MODAL -->
+    <div class="diag-screen" id="diagForm">
+      <div class="diag-form-title">予約フォーム</div>
+      <p style="color:var(--muted);font-size:12px;margin-bottom:20px;">おすすめメニュー：<strong id="diagFormMenu" style="color:var(--green);"></strong></p>
+      <div class="diag-form-group">
+        <label class="diag-form-label">お名前 <span style="color:var(--green)">*</span></label>
+        <input type="text" class="diag-form-input" id="dName" placeholder="山田 太郎" required>
+      </div>
+      <div class="diag-form-row">
+        <div class="diag-form-group">
+          <label class="diag-form-label">携帯電話番号 <span style="color:var(--green)">*</span></label>
+          <input type="tel" class="diag-form-input" id="dPhone" placeholder="090-0000-0000" required>
+        </div>
+        <div class="diag-form-group">
+          <label class="diag-form-label">メールアドレス <span style="color:var(--green)">*</span></label>
+          <input type="email" class="diag-form-input" id="dEmail" placeholder="example@email.com" required>
+        </div>
+      </div>
+      <div class="diag-form-row">
+        <div class="diag-form-group">
+          <label class="diag-form-label">希望日（第1希望） <span style="color:var(--green)">*</span></label>
+          <input type="date" class="diag-form-input" id="dDate" required>
+        </div>
+        <div class="diag-form-group">
+          <label class="diag-form-label">希望時間帯</label>
+          <select class="diag-form-input" id="dTime">
+            <option value="11:00〜13:00">11:00〜13:00</option>
+            <option value="13:00〜15:00">13:00〜15:00</option>
+            <option value="15:00〜17:00">15:00〜17:00</option>
+            <option value="17:00〜20:00">17:00〜20:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="diag-form-group">
+        <label class="diag-form-label">希望日（第2希望）</label>
+        <input type="date" class="diag-form-input" id="dDate2">
+      </div>
+      <button class="diag-submit-btn" id="diagSubmitBtn" onclick="submitDiagBooking()">予約を送信する →</button>
+    </div>
+
+    <!-- COMPLETE -->
+    <div class="diag-screen" id="diagComplete">
+      <div class="diag-complete">
+        <div class="diag-complete-icon">✅</div>
+        <div class="diag-complete-title">受付完了</div>
+        <p class="diag-complete-text">ご予約を受け付けました。<br>LINEまたはメールにてご連絡いたします。</p>
+        <a href="https://line.me/R/ti/p/@436hrsli" target="_blank" rel="noopener" class="diag-line-btn">💬 LINEで確認する</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== スマホ底部固定ナビ ===== -->
+<div id="mobileNav"></div>
+
+</body>
+
+<script>
+// =============================================
+// CONSTANTS（要設定：プレースホルダー）
+// =============================================
+const LP_ID = 'kaede-v2';
+const AMPLITUDE_API_KEY = '8d3b5be866c4740fa6c83949f85ce25e';
+const EMAILJS_SERVICE_ID = 'service_xh3oajd';
+const EMAILJS_TEMPLATE_ID = 'template_s381ttd';
+const EMAILJS_PUBLIC_KEY  = 's45-Ce7lRsbQtqlNt';
+const LINE_URL = 'https://line.me/R/ti/p/@436hrsli';
+
+// =============================================
+// AMPLITUDE 初期化
+// =============================================
+!(function(e,t){var r=e.amplitude||{_q:[],_iq:{}};
+  if(r.invoked){return}r.invoked=true;
+  var n=t.createElement("script");n.type="text/javascript";
+  n.integrity="sha384-PPfHw2ILiMflG4NqsJyYAALQD4t1+7RVxuFNuHj1GKBEcrLKBl61cTdHR9JKGQ4";
+  n.crossOrigin="anonymous";n.async=true;
+  n.src="https://cdn.amplitude.com/libs/analytics-browser-2.3.5-min.js.gz";
+  n.onload=function(){e.amplitude.runQueuedFunctions||console.log("[Amplitude] SDK failed to load.")};
+  var s=t.getElementsByTagName("script")[0];s.parentNode.insertBefore(n,s);
+  function i(e,t){e.prototype[t]=function(){return this._q.push({name:t,args:Array.prototype.slice.call(arguments,0)}),this}}
+  var a=function(){this._q=[];return this};
+  var c=["add","append","clearAll","prepend","set","setOnce","unset","preInsert","postInsert","remove","getUserProperties"];
+  for(var l=0;l<c.length;l++){i(a,c[l])}r.Identify=a;
+  var u=function(){this._q=[];return this};
+  var p=["getEventProperties","setProductId","setQuantity","setPrice","setRevenue","setRevenueType","setEventProperties"];
+  for(var d=0;d<p.length;d++){i(u,p[d])}r.Revenue=u;
+  var f=["getDeviceId","setDeviceId","getSessionId","setSessionId","getUserId","setUserId","setOptOut","setTransport","reset","extendSession"];
+  var g=["init","add","remove","track","logEvent","identify","groupIdentify","setGroup","getUserId","getDeviceId","getSessionId","setOptOut","setTransport","reset","extendSession","flush"];
+  function v(e){function t(t,r){e[t]=function(){var n={promise:new Promise(function(r){e._q.push({name:t,args:Array.prototype.slice.call(arguments,0),resolve:r})})};if(r){n.promise=n.promise.then(function(e){return e})}return n}}
+  for(var r=0;r<f.length;r++){t(f[r],false)}for(var n=0;n<g.length;n++){t(g[n],true)}return e}
+  r=v(r);r.getInstance=function(e){e=(!e||e.length===0?"$default_instance":e).toLowerCase();
+  if(!Object.prototype.hasOwnProperty.call(r._iq,e)){r._iq[e]=v({})}return r._iq[e]};
+  e.amplitude=r})(window,document);
+
+amplitude.init(AMPLITUDE_API_KEY);
+amplitude.track('page_view', { lp: LP_ID });
+
+// =============================================
+// EmailJS 初期化
+// =============================================
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+// =============================================
+// 診断データ
+// =============================================
+const questions = [
+  {
+    text: 'Q1. 今、一番気になっている部位はどこですか？',
+    opts: ['ヒゲ・フェイスライン（Sパーツ〜顔のみ）', 'ワキ・うなじ（Mパーツ）', 'VIO・デリケートゾーン（Lパーツ）', '全身まとめてケアしたい']
+  },
+  {
+    text: 'Q2. 脱毛の経験はありますか？',
+    opts: ['今回が初めて', '他のサロンで経験あり', '自己処理（カミソリ・除毛クリーム）のみ', '家庭用脱毛器の経験あり']
+  },
+  {
+    text: 'Q3. 脱毛を始めたいと思ったきっかけは？',
+    opts: ['自己処理が面倒・肌荒れが気になる', '清潔感・見た目を高めたい', 'パートナーや周囲からのアドバイス', '介護・スポーツなど実用的な理由']
+  },
+  {
+    text: 'Q4. 通い方について教えてください。',
+    opts: ['毎月定期的に通いたい', '予算に合わせて不定期に通いたい', 'まず1〜2回試してから決めたい', '仕事・出張で不定期になりがち']
+  },
+  {
+    text: 'Q5. 1回あたりの予算はどのくらいですか？',
+    opts: ['¥1,000 以下', '¥1,000〜¥3,000', '¥3,000〜¥7,000', '¥7,000 以上（全身など）']
+  }
+];
+
+let currentQ = 0;
+let answers = [];
+let diagResult = {};
+
+// =============================================
+// 診断モーダル制御
+// =============================================
+function openDiag(e) {
+  document.getElementById('diagOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  amplitude.track('diagnosis_click', { lp: LP_ID });
+}
+function closeDiag() {
+  document.getElementById('diagOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function showScreen(id) {
+  document.querySelectorAll('.diag-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function startDiag() {
+  currentQ = 0;
+  answers = [];
+  showScreen('diagQuestion');
+  renderQ();
+}
+function renderQ() {
+  const q = questions[currentQ];
+  document.getElementById('qNum').textContent = currentQ + 1;
+  document.getElementById('progressFill').style.width = ((currentQ + 1) / 5 * 100) + '%';
+  document.getElementById('qText').textContent = q.text;
+  const opts = document.getElementById('qOptions');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'diag-opt';
+    btn.textContent = o;
+    btn.onclick = () => {
+      opts.querySelectorAll('.diag-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('nextBtn').classList.add('enabled');
+    };
+    opts.appendChild(btn);
+  });
+  document.getElementById('nextBtn').classList.remove('enabled');
+  document.getElementById('nextBtn').textContent = currentQ === 4 ? '診断する →' : '次の質問 →';
+}
+function nextQ() {
+  const sel = document.querySelector('#qOptions .selected');
+  if (!sel) return;
+  answers.push(sel.textContent);
+  if (currentQ < 4) {
+    currentQ++;
+    renderQ();
+  } else {
+    runDiagnosis();
+  }
+}
+
+// =============================================
+// Gemini診断APIコール
+// =============================================
+async function runDiagnosis() {
+  showScreen('diagLoading');
+  try {
+    const res = await fetch('/api/diagnose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers, lp: LP_ID })
+    });
+    if (!res.ok) throw new Error('API error');
+    diagResult = await res.json();
+    showResult(diagResult);
+  } catch(e) {
+    diagResult = fallbackDiagnosis(answers);
+    showResult(diagResult);
+  }
+}
+
+function fallbackDiagnosis(ans) {
+  const part = ans[0] || '';
+  const budget = ans[4] || '';
+  let menu = 'Mパーツ（ワキ・うなじ）', price = '¥1,400 税込', score = 60, level = 'B';
+  if (part.includes('全身')) { menu = '全身脱毛（VIOなし）'; price = '¥11,000 税込'; score = 85; level = 'A'; }
+  else if (part.includes('VIO')) { menu = 'VIO単体 / Lパーツ'; price = '¥4,000〜¥4,200 税込'; score = 72; level = 'B'; }
+  else if (part.includes('ヒゲ') || part.includes('顔')) { menu = '顔のみ（25分）'; price = '¥3,000 税込'; score = 65; level = 'B'; }
+  if (budget.includes('1,000 以下')) { menu = 'Sパーツ（鼻下・あご etc.）'; price = '¥700 税込'; score = 55; level = 'C'; }
+  return { recommended_menu: menu, price, score, level, reason: `ご回答内容から、まず${menu}でのお試しをおすすめします。kaede salonは都度払いのため、まず1回体験してから継続を判断いただけます。` };
+}
+
+function showResult(r) {
+  diagResult = r;
+  document.getElementById('resLevel').textContent = `診断レベル ${r.level}`;
+  document.getElementById('resMenu').textContent = `おすすめ：${r.recommended_menu}`;
+  document.getElementById('resPrice').textContent = r.price || '';
+  document.getElementById('resReason').textContent = r.reason || '';
+  document.getElementById('resScore').textContent = `スコア：${r.score} / 100`;
+  showScreen('diagResult');
+}
+
+function showDiagForm() {
+  document.getElementById('diagFormMenu').textContent = diagResult.recommended_menu;
+  showScreen('diagForm');
+}
+
+// =============================================
+// 予約送信（診断モーダル内）
+// =============================================
+async function submitDiagBooking() {
+  const name  = document.getElementById('dName').value.trim();
+  const phone = document.getElementById('dPhone').value.trim();
+  const email = document.getElementById('dEmail').value.trim();
+  const date  = document.getElementById('dDate').value;
+  const time  = document.getElementById('dTime').value;
+  const date2 = document.getElementById('dDate2').value;
+  if (!name || !phone || !email || !date) { alert('必須項目を入力してください。'); return; }
+
+  const btn = document.getElementById('diagSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  const dateStr = date.replace(/-/g, '/') + ' ' + time;
+  const date2Str = date2 ? date2.replace(/-/g, '/') : '';
+  const answersStr = answers.join(' / ');
+  const sentAt = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+
+  const payload = {
+    name, phone, email,
+    date: dateStr, date2: date2Str,
+    recommended_menu: diagResult.recommended_menu || '',
+    score: diagResult.score || '',
+    level: diagResult.level || '',
+    answers: answersStr,
+    lp: LP_ID,
+    sent_at: sentAt
+  };
+
+  try {
+    // スプレッドシート保存
+    await fetch('/api/save-shigyou', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    // Googleカレンダー登録
+    await fetch('/api/book', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email, preferredDate: date, preferredTime: time, date2, recommended_menu: diagResult.recommended_menu || '' })
+    });
+    // EmailJS送信
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      name, phone, email,
+      date: dateStr, date2: date2Str,
+      recommended_menu: diagResult.recommended_menu || '',
+      score: String(diagResult.score || ''),
+      level: diagResult.level || '',
+      answers: answersStr,
+      lp: LP_ID,
+      sent_at: sentAt
+    });
+    // Amplitudeイベント
+    amplitude.track('booking_complete', { lp: LP_ID, score: diagResult.score, level: diagResult.level });
+    showScreen('diagComplete');
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = '予約を送信する →';
+    alert('送信中にエラーが発生しました。LINEよりご連絡ください。');
+  }
+}
+
+// =============================================
+// 予約送信（ページ内フォーム）
+// =============================================
+async function submitBooking() {
+  const name  = document.getElementById('bName').value.trim();
+  const phone = document.getElementById('bPhone').value.trim();
+  const email = document.getElementById('bEmail').value.trim();
+  const date  = document.getElementById('bDate').value;
+  const time  = document.getElementById('bTime').value;
+  const date2 = document.getElementById('bDate2').value;
+  if (!name || !phone || !email || !date) { alert('必須項目を入力してください。'); return; }
+
+  const btn = document.getElementById('bookSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  const dateStr = date.replace(/-/g, '/') + ' ' + time;
+  const date2Str = date2 ? date2.replace(/-/g, '/') : '';
+  const sentAt = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+
+  const payload = {
+    name, phone, email,
+    date: dateStr, date2: date2Str,
+    recommended_menu: '', score: '', level: '', answers: '',
+    lp: LP_ID, sent_at: sentAt
+  };
+
+  try {
+    await fetch('/api/save-shigyou', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    await fetch('/api/book', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email, preferredDate: date, preferredTime: time, date2, recommended_menu: '' })
+    });
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      name, phone, email,
+      date: dateStr, date2: date2Str,
+      recommended_menu: '', score: '', level: '', answers: '',
+      lp: LP_ID, sent_at: sentAt
+    });
+    amplitude.track('booking_complete', { lp: LP_ID, score: '', level: '' });
+    document.getElementById('bookingFormWrap').style.display = 'none';
+    document.getElementById('bookingComplete').style.display = 'block';
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = '予約を送信する →';
+    alert('送信中にエラーが発生しました。LINEよりご連絡ください。');
+  }
+}
+
+// =============================================
+// スマホ底部固定ナビ（インラインスタイル必須）
+// =============================================
+function buildMobileNav() {
+  if (window.innerWidth > 768) return;
+  const nav = document.getElementById('mobileNav');
+  nav.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:300;display:flex;height:68px;box-shadow:0 -2px 12px rgba(0,0,0,.4);';
+
+  const btnBook = document.createElement('button');
+  btnBook.textContent = '📅 予約';
+  btnBook.style.cssText = 'flex:1;background:#1a2a1a;color:#8a9e8a;border:none;border-top:1px solid #1e2e1e;font-size:12px;letter-spacing:.06em;cursor:pointer;font-family:\'Noto Sans JP\',sans-serif;';
+  btnBook.onclick = () => { document.getElementById('booking').scrollIntoView({ behavior:'smooth' }); };
+
+  const btnDiag = document.createElement('button');
+  btnDiag.textContent = '🤖 AI診断';
+  btnDiag.style.cssText = 'flex:1;background:#1db954;color:#080c08;border:none;border-top:1px solid #1db954;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;font-family:\'Barlow Condensed\',sans-serif;';
+  btnDiag.onclick = () => openDiag(null);
+
+  const btnLine = document.createElement('button');
+  btnLine.textContent = '💬 LINE';
+  btnLine.style.cssText = 'flex:1;background:#06C755;color:#fff;border:none;border-top:1px solid #06C755;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;font-family:\'Noto Sans JP\',sans-serif;';
+  btnLine.onclick = () => window.open(LINE_URL, '_blank');
+
+  nav.appendChild(btnBook);
+  nav.appendChild(btnDiag);
+  nav.appendChild(btnLine);
+
+  // フッター分の余白
+  document.body.style.paddingBottom = '68px';
+}
+buildMobileNav();
+window.addEventListener('resize', () => {
+  const nav = document.getElementById('mobileNav');
+  if (window.innerWidth > 768) { nav.style.display = 'none'; document.body.style.paddingBottom = '0'; }
+  else { nav.style.display = 'flex'; document.body.style.paddingBottom = '68px'; }
+});
+
+// =============================================
+// フェードイン
+// =============================================
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+</script>
+</html>
